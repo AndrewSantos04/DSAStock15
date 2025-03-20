@@ -2,17 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package inventory;
+package inventory; //This organizes your class under the inventory package
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class StockBST {
     private StockNode root;
-
+    ////This code uses two custom classes: StockBST – Manages the inventory using a BST. StockNode – Represents each stock item (not included here but assumed to exist).
+    ///
     // Insert a new stock item into BST
     public void insert(String brand, String model, int quantity) {
         root = insertRec(root, brand, model, quantity);
+        //insertRec() is a recursive helper method: current node is null, create a new node.
+        //Compare the brand: If smaller, insert in the left subtree. If larger, insert in the right subtree. recursion? It simplifies navigation and insertion.
     }
 
     private StockNode insertRec(StockNode node, String brand, String model, int quantity) {
@@ -36,9 +40,15 @@ public class StockBST {
             bstToArrayList(node.right, stockList);
         }
     }
+   /*This method recursively converts the BST into an ArrayList:
+
+Traverse left subtree (smaller values).
+Add the node to the list.
+Traverse right subtree (larger values).*/
+    
 public StockNode search(String brand) {
     return searchRec(root, brand);
-}
+} //If the node is null or the brand matches, return the node. If the brand is smaller, search the left subtree. If the brand is larger, search the right subtree.
 
 private StockNode searchRec(StockNode node, String brand) {
     if (node == null || node.brand.equalsIgnoreCase(brand)) {
@@ -82,7 +92,7 @@ private StockNode searchRec(StockNode node, String brand) {
     
     public void displayStock() {
     displayStockRec(root);
-}
+}//uses in-order traversal (left → root → right). It prints the stock in alphabetical order by brand.
 
 private void displayStockRec(StockNode node) {
     if (node != null) {
@@ -95,6 +105,11 @@ private void displayStockRec(StockNode node) {
     public void delete(String brand) {
     root = deleteStock(root, brand);
 }
+    
+  /*No children (leaf node) – Simply remove the node.
+One child – Replace node with its child.
+Two children – Find in-order successor (smallest node in the right subtree) to replace the node.
+    Each case ensures the BST remains valid after deletion.*/
 
 private StockNode deleteStock(StockNode root, String brand) {
     if (root == null) return root;
@@ -148,4 +163,4 @@ private StockNode findMin(StockNode node) {
     }
 }
 
-    
+
