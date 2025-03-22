@@ -4,7 +4,7 @@
  */
 package inventory;
 
-class StockItem {
+public class StockItem {
     String brand;
     String model;
     int quantity;
@@ -13,6 +13,18 @@ class StockItem {
         this.brand = brand;
         this.model = model;
         this.quantity = quantity;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     @Override

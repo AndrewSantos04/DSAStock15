@@ -4,81 +4,83 @@ import java.util.Scanner;
 
 public class StockInventoryApp {
     public static void main(String[] args) {
-        // ✅ Create BST & Hash Table Inventory
-        StockBST inventoryBST = new StockBST();
-        InventoryHashTable inventoryHash = new InventoryHashTable();
+        InventoryManager inventoryManager = new InventoryManager();
         Scanner scanner = new Scanner(System.in);
 
-        // ✅ 1. Insert sample stock items (BST & Hash Table)
-        System.out.println("\n📌 Inserting Sample Stock Items...");
-        inventoryBST.insert("Yamaha", "YZF-R3", 10);
-        inventoryBST.insert("Honda", "CBR500R", 15);
-        inventoryBST.insert("Kawasaki", "Ninja 400", 8);
-        inventoryBST.insert("Suzuki", "GSX250R", 12);
+        // ✅ Insert Sample Stock Items
+        inventoryManager.addStock("Yamaha", "YZF-R3", 10);
+        inventoryManager.addStock("Honda", "CBR500R", 15);
+        inventoryManager.addStock("Kawasaki", "Ninja 400", 8);
+        inventoryManager.addStock("Suzuki", "GSX250R", 12);
 
-        inventoryHash.addStock("Yamaha", "YZF-R3", 10);
-        inventoryHash.addStock("Honda", "CBR500R", 15);
-        inventoryHash.addStock("Kawasaki", "Ninja 400", 8);
-        inventoryHash.addStock("Suzuki", "GSX250R", 12);
+        System.out.println("🚀 Welcome to MotorPH Inventory System");
 
-        // ✅ 2. Display inventory before sorting
-        System.out.println("\n📌 MotorPH Inventory (BST - Unsorted):");
-        inventoryBST.displayStock();
+        // ✅ Menu Loop for Navigation
+        while (true) {
+            System.out.println("\n📊 Choose an action:");
+            System.out.println("1. Add Stock");
+            System.out.println("2. Search Stock");
+            System.out.println("3. Delete Stock");
+            System.out.println("4. Display Unsorted Inventory");
+            System.out.println("5. Display Sorted Inventory");
+            System.out.println("6. Exit");
+            System.out.print("👉 Enter your choice: ");
 
-        System.out.println("\n📌 MotorPH Inventory (Hash Table):");
-        inventoryHash.displayInventory();
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-        // ✅ 3. Search for a stock item (BST)
-        System.out.print("\n🔍 Enter brand to search (BST): ");
-        String searchBrand = scanner.nextLine();
-        StockNode foundStockBST = inventoryBST.search(searchBrand);
+            switch (choice) {
+                case 1:
+                    System.out.print("📦 Enter brand: ");
+                    String brand = scanner.nextLine();
+                    System.out.print("📦 Enter model: ");
+                    String model = scanner.nextLine();
+                    System.out.print("📦 Enter quantity: ");
+                    int qty = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    inventoryManager.addStock(brand, model, qty);
+                    System.out.println("✅ Stock added successfully!");
+                    break;
 
-        if (foundStockBST != null) {
-            System.out.println("✅ Stock Found (BST) -> Brand: " + foundStockBST.brand + ", Model: " + foundStockBST.model + ", Quantity: " + foundStockBST.quantity);
-        } else {
-            System.out.println("❌ Stock not found in BST.");
+                case 2:
+                    System.out.print("🔍 Enter brand to search: ");
+                    String searchBrand = scanner.nextLine();
+                    System.out.print("🔍 Enter model to search: ");
+                    String searchModel = scanner.nextLine();
+                    StockItem foundItem = inventoryManager.searchStock(searchBrand, searchModel);
+                    if (foundItem != null) {
+                        System.out.println("✅ Found: " + foundItem);
+                    } else {
+                        System.out.println("❌ Stock not found!");
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("🗑️ Enter brand to delete: ");
+                    String deleteBrand = scanner.nextLine();
+                    System.out.print("🗑️ Enter model to delete: ");
+                    String deleteModel = scanner.nextLine();
+                    inventoryManager.deleteStock(deleteBrand, deleteModel);
+                    System.out.println("✅ Stock deleted successfully!");
+                    break;
+
+                case 4:
+                    inventoryManager.displayInventory();
+                    break;
+
+                case 5:
+                    inventoryManager.displaySortedInventory();
+                    break;
+
+                case 6:
+                    System.out.println("👋 Exiting... Thank you!");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("❌ Invalid choice! Please try again.");
+            }
         }
-
-        // ✅ 4. Search for a stock item (Hash Table)
-        System.out.print("\n🔍 Enter brand to search (Hash Table): ");
-        String searchHashBrand = scanner.nextLine();
-        System.out.print("🔍 Enter model to search (Hash Table): ");
-        String searchHashModel = scanner.nextLine();
-        StockItem foundStockHash = inventoryHash.searchStock(searchHashBrand, searchHashModel);
-
-        if (foundStockHash != null) {
-            System.out.println("✅ Stock Found (Hash Table) -> " + foundStockHash);
-        } else {
-            System.out.println("❌ Stock not found in Hash Table.");
-        }
-
-        // ✅ 5. Delete a stock item (BST)
-        System.out.print("\n🗑️ Enter brand to delete (BST): ");
-        String deleteBrandBST = scanner.nextLine();
-        inventoryBST.delete(deleteBrandBST);
-
-        // ✅ 6. Delete a stock item (Hash Table)
-        System.out.print("\n🗑️ Enter brand to delete (Hash Table): ");
-        String deleteHashBrand = scanner.nextLine();
-        System.out.print("🗑️ Enter model to delete (Hash Table): ");
-        String deleteHashModel = scanner.nextLine();
-        inventoryHash.deleteStock(deleteHashBrand, deleteHashModel);
-
-        // ✅ 7. Display updated inventory after deletion
-        System.out.println("\n📌 Updated Inventory after Deletion (BST):");
-        inventoryBST.displayStock();
-
-        System.out.println("\n📌 Updated Inventory after Deletion (Hash Table):");
-        inventoryHash.displayInventory();
-
-        // ✅ 8. Sort stock items (BST)
-        System.out.println("\n📌 Sorting Stock by Brand (BST)...");
-        inventoryBST.sortStockByBrand();
-
-        // ✅ 9. Display sorted inventory (BST)
-        System.out.println("\n📌 Sorted Inventory (BST):");
-        inventoryBST.displayStock();
-
-        scanner.close();
     }
 }
